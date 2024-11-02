@@ -7,6 +7,8 @@ module Chapter8
       , bools
       , substs
       , isTaut
+      , Expr(..)
+      , value
     ) where
 
 import Chapter7
@@ -138,3 +140,22 @@ substs p = map (zip vs) (bools (length vs))
 -}
 isTaut :: Prop -> Bool
 isTaut p = and [eval s p | s <- substs p]
+
+-- | 整数と加算演算子からなる数式
+data Expr = Val Int
+          | Add Expr Expr
+
+{-|
+  @
+  数式を評価します。
+  @
+  
+  == 引数
+  * 'e' - 評価する数式
+  
+  == 戻り値
+  数式の評価結果
+-}
+value :: Expr -> Int
+value (Val n)   = n
+value (Add x y) = value x + value y
