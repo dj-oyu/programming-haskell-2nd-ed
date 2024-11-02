@@ -9,6 +9,9 @@ module Chapter8
       , isTaut
       , Expr(..)
       , value
+      , Cont
+      , Op(..)
+      , value'
     ) where
 
 import Chapter7
@@ -159,3 +162,54 @@ data Expr = Val Int        -- ^ 整数
 value :: Expr -> Int
 value (Val n)   = n
 value (Add x y) = value x + value y
+
+-- | 命令スタック
+type Cont = [Op]
+
+-- | 命令
+data Op = EVAL Expr  -- ^ 式の評価
+        | ADD  Int   -- ^ 加算
+
+{-|
+  @
+  式を評価します。
+  @
+  
+  == 引数
+  * 'Expr' - 評価する式
+  * 'Cont' - 命令列
+  
+  == 戻り値
+  評価結果
+-}
+eval' :: Expr -> Cont -> Int
+eval' (Val n)   c = exec c n
+eval' (Add x y) c = eval' x (EVAL y : c) -- | ^ 左のオペランドから評価する
+
+{-|
+  @
+  命令の実行
+  @
+  
+  == 引数
+  * 'Op' - 実行する命令
+  * 'Int' - 評価結果
+-}
+exec :: Cont -> Int -> Int
+exec []           n = n
+exec (EVAL y : c) n = eval' y (ADD n : c)
+exec (ADD  n : c) m = exec c (n + m)
+
+{-|
+  @
+  抽象機械で式を評価します
+  @
+  
+  == 引数
+   * 'Expr' - 評価する式
+
+  == 戻り値
+  評価結果  
+-}
+value' :: Expr -> Int
+value' e = eval' e []

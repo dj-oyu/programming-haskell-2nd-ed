@@ -1,5 +1,6 @@
 import Chapter8
 import Test.Hspec
+import Text.Printf (vFmt)
 
 main :: IO ()
 main = hspec $ do
@@ -54,6 +55,10 @@ main = hspec $ do
         it "value function" $ do
             let v = value (Add (Val 1) (Val 2))
             v `shouldBe` 3
+        
+        it "calculate on abstract machine" $ do
+            let v = value' (Add (Add (Val 2) (Val 3)) (Val 4))
+            v `shouldBe` 9
 
     describe "findTest function" $ do
         it "returns 'two' for input 2" $ do
