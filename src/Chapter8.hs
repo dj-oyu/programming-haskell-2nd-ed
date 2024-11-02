@@ -142,8 +142,8 @@ isTaut :: Prop -> Bool
 isTaut p = and [eval s p | s <- substs p]
 
 -- | 整数と加算演算子からなる数式
-data Expr = Val Int
-          | Add Expr Expr
+data Expr = Val Int        -- ^ 整数
+          | Add Expr Expr  -- ^ 加算
 
 {-|
   @
