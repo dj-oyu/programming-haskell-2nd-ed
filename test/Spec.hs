@@ -63,11 +63,14 @@ main = hspec $ do
             let v1 = value' (Mul (Val 3) (Val 0))
             v1 `shouldBe` 0
 
-            let v2 = value' (Mul (Val 3) (Val 4))
-            v2 `shouldBe` 12
+            let v2 = value' (Mul (Add (Val 2) (Val 3)) (Val 1))
+            v2 `shouldBe` 5
 
-            let v3 = value' (Mul (Val 3) (Add (Val 2) (Val 3)))
-            v3 `shouldBe` 15
+            let v3 = value' (Mul (Val 3) (Val 4))
+            v3 `shouldBe` 12
+
+            let v4 = value' (Mul (Val 3) (Add (Val 2) (Val 3)))
+            v4 `shouldBe` 15
 
 
     describe "findTest function" $ do
