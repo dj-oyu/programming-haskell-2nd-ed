@@ -148,6 +148,7 @@ isTaut p = and [eval s p | s <- substs p]
 data Expr = Val Int        -- ^ 整数
           | Add Expr Expr  -- ^ 加算
           | Mul Expr Expr  -- ^ 乗算
+          | Div Expr Expr  -- ^ 除算
 
 {-|
   @
@@ -164,6 +165,7 @@ value :: Expr -> Int
 value (Val n)   = n
 value (Add x y) = value x + value y
 value (Mul x y) = value x * value y
+value (Div x y) = value x `div` value y
 
 -- | 命令スタック
 type Cont = [Op]
@@ -191,6 +193,13 @@ eval' (Mul x y) c = do
   let m = eval' y []
   if m == 0 then exec c 0
   else eval' (Add x (Mul x (Val (m - 1)))) c
+eval' (Div x y) c = do
+  let denom = eval' y []
+  if denom == 0 then error "Division by zero"
+  else do
+    let num   = exec [EVAL x] (-denom)
+    if num < 0 then exec c 0
+    else eval' (Add (Val 1) (Div (Val num) (Val denom))) c
 
 {-|
   @

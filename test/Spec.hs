@@ -1,5 +1,6 @@
 import Chapter8
 import Test.Hspec
+import Control.Exception.Base
 
 main :: IO ()
 main = hspec $ do
@@ -54,11 +55,11 @@ main = hspec $ do
         it "value function" $ do
             let v = value (Add (Val 1) (Val 2))
             v `shouldBe` 3
-        
+
         it "calculate on abstract machine - Add" $ do
             let v = value' (Add (Add (Val 2) (Val 3)) (Val 4))
             v `shouldBe` 9
-        
+
         it "calculate on abstract machine - Mul" $ do
             let v1 = value' (Mul (Val 3) (Val 0))
             v1 `shouldBe` 0
@@ -71,6 +72,16 @@ main = hspec $ do
 
             let v4 = value' (Mul (Val 3) (Add (Val 2) (Val 3)))
             v4 `shouldBe` 15
+
+        it "calculate on abstract machine - Div" $ do
+            let v1 = value' (Div (Val 6) (Val 2))
+            v1 `shouldBe` 3
+
+            let v2 = value' (Div (Add (Val 2) (Val 3)) (Val 2))
+            v2 `shouldBe` 2
+
+            let v3 = value' (Div (Val 6) (Val 0))
+            evaluate v3 `shouldThrow` anyErrorCall
 
 
     describe "findTest function" $ do
