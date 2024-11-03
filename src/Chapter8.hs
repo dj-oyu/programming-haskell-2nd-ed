@@ -197,7 +197,7 @@ eval' (Div x y) c = do
   let denom = eval' y []
   if denom == 0 then error "Division by zero"
   else do
-    let num   = exec [EVAL x] (-denom)
+    let num = exec [EVAL x] (-denom)
     if num < 0 then exec c 0
     else eval' (Add (Val 1) (Div (Val num) (Val denom))) c
 

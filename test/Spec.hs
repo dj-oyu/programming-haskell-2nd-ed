@@ -84,8 +84,8 @@ main = hspec $ do
             evaluate v3 `shouldThrow` anyErrorCall
 
         it "calculate on abstract machine - Complex" $ do
-            let v = value' (Add (Mul (Val 2) (Val 3)) (Div (Val 6) (Val 2)))
-            v `shouldBe` 9
+            let v = value' (Add (Mul (Val 2) (Val 3)) (Div (Val 9) (Val 4)))
+            v `shouldBe` 8
 
     describe "findTest function" $ do
         it "returns 'two' for input 2" $ do
