@@ -83,6 +83,9 @@ main = hspec $ do
             let v3 = value' (Div (Val 6) (Val 0))
             evaluate v3 `shouldThrow` anyErrorCall
 
+        it "calculate on abstract machine - Complex" $ do
+            let v = value' (Add (Mul (Val 2) (Val 3)) (Div (Val 6) (Val 2)))
+            v `shouldBe` 9
 
     describe "findTest function" $ do
         it "returns 'two' for input 2" $ do
