@@ -147,6 +147,7 @@ isTaut p = and [eval s p | s <- substs p]
 -- | 整数と加算演算子からなる数式
 data Expr = Val Int        -- ^ 整数
           | Add Expr Expr  -- ^ 加算
+          | Mul Expr Expr  -- ^ 乗算
 
 {-|
   @
@@ -162,6 +163,7 @@ data Expr = Val Int        -- ^ 整数
 value :: Expr -> Int
 value (Val n)   = n
 value (Add x y) = value x + value y
+value (Mul x y) = value x * value y
 
 -- | 命令スタック
 type Cont = [Op]
@@ -185,6 +187,10 @@ data Op = EVAL Expr  -- ^ 式の評価
 eval' :: Expr -> Cont -> Int
 eval' (Val n)   c = exec c n
 eval' (Add x y) c = eval' x (EVAL y : c) -- | ^ 左のオペランドから評価する
+eval' (Mul x y) c = do
+  let m = eval' y []
+  if m == 0 then exec c 0
+  else eval' (Add x (Mul x (Val (m - 1)))) c
 
 {-|
   @
