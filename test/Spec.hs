@@ -83,6 +83,9 @@ main = hspec $ do
             let v3 = value' (Div (Val 6) (Val 0))
             evaluate v3 `shouldThrow` anyErrorCall
 
+            let v4 = value' (Div (Div (Val 8) (Val 2)) (Div (Val 10) (Val 5)))
+            v4 `shouldBe` 2
+
         it "calculate on abstract machine - Complex" $ do
             let v = value' (Add (Mul (Val 2) (Val 3)) (Div (Val 9) (Val 4)))
             v `shouldBe` 8
