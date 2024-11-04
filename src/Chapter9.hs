@@ -1,5 +1,4 @@
 module Chapter9 where
-import Data.Type.Equality (apply)
 
 {- |
   == カウントダウン問題について
@@ -14,9 +13,8 @@ import Data.Type.Equality (apply)
     * 割り算は整数に割り切れるもののみ
 -}
 main :: IO ()
-main = do
-    print "Let's play Countdown!"
-    print (App Add (Val 1) (App Mul (Val 2) (Val 3)))
+main =
+    print "Let's play Countdown!" >> print (App Add (Val 1) (App Mul (Val 2) (Val 3)))
 
 -- | 算術演算子
 data Op = Add | Sub | Mul | Div
