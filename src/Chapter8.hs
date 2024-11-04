@@ -144,7 +144,7 @@ substs p = map (zip vs) (bools (length vs))
 isTaut :: Prop -> Bool
 isTaut p = and [eval s p | s <- substs p]
 
--- | 整数と加算演算子からなる数式
+-- | 整数と演算子からなる数式
 data Expr = Val Int        -- ^ 整数
           | Add Expr Expr  -- ^ 加算
           | Mul Expr Expr  -- ^ 乗算

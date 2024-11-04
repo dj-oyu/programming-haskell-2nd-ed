@@ -27,6 +27,7 @@ library
   exposed-modules:
       Chapter7
       Chapter8
+      Chapter9
       Lib
   other-modules:
       Paths_programming_haskell_2nd_ed
