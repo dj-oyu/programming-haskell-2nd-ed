@@ -13,8 +13,13 @@ module Chapter9 where
     * 割り算は整数に割り切れるもののみ
 -}
 main :: IO ()
-main =
-    print "Let's play Countdown!" >> print (App Add (Val 1) (App Mul (Val 2) (Val 3)))
+main = do
+    print "Let's play Countdown!"
+    let expr = App Add (Val 1) (App Mul (Val 2) (Val 3)) in
+      do
+        print $ "  expr: " ++ show expr
+        print $ "values: " ++ foldr (\e acc -> show e ++ if acc /= "" then ", " ++ acc else "") "" (values expr)
+        print $ "  eval: " ++ foldr (\e acc -> show e ++ acc) "" (eval expr)
 
 -- | 算術演算子
 data Op = Add | Sub | Mul | Div
@@ -48,3 +53,26 @@ instance Show Expr where
         where
             brak (Val n) = show n
             brak e       = "(" ++ show e ++ ")"
+
+{- |
+  == 数式の値を取得
+    @
+    values (App Add (Val 1) (Val 2)) == [1, 2]
+    @
+-}
+values :: Expr -> [Int]
+values (Val n) = [n]
+values (App _ l r) = values l ++ values r
+
+{- |
+  == 数式の値を取得
+    @
+    eval (App Add (Val 1) (Val 2)) == [3]
+    @
+  == 戻り値
+  * 空のリスト - 失敗
+  * 長さが1のリスト - 成功
+-}
+eval :: Expr -> [Int]
+eval (Val n) = [n | n > 0]
+eval (App o l r) = [apply o x y | x <- eval l, y <- eval r, valid o x y]
